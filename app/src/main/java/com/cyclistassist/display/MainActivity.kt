@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity(), BluetoothInterface {
     private val bluetoothDeviceArray = ArrayList<BluetoothDevice>()
     private val bluetoothStatus: TextView by lazy { findViewById<TextView>(R.id.status) }
     private val leDeviceListAdapter : BluetoothConnectionRecyclerAdapter by lazy { BluetoothConnectionRecyclerAdapter(bluetoothDeviceArray, this) }
-    private var bluetoothController: BluetoothController? = null
+    lateinit var bluetoothScanner: BluetoothScanner;
 
     val scanButton : Button by lazy {findViewById<Button>(R.id.btn_scan)}
 
@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity(), BluetoothInterface {
 
         val bluetoothManager = getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
         val bluetoothAdapter: BluetoothAdapter = bluetoothManager.adapter
-        bluetoothController = BluetoothController(this, bluetoothAdapter, this)
+        bluetoothScanner = BluetoothScanner(this, bluetoothAdapter, this)
 
         // Bluetooth Permissions
         if (!bluetoothAdapter.isEnabled) {
@@ -46,17 +46,11 @@ class MainActivity : AppCompatActivity(), BluetoothInterface {
 
         scanButton.setOnClickListener {
             leDeviceListAdapter.clearDevices()
-            bluetoothController?.scanLeDevice()
+            bluetoothScanner?.scanLeDevice()
         }
-
-        val controlButton: Button = findViewById(R.id.btn_controls)
-        controlButton.setOnClickListener { startActivity(Intent(this, Control::class.java)) }
 
         val settingsButton : Button = findViewById(R.id.btn_settings)
         settingsButton.setOnClickListener {
-            setStatus("services")
-            //bluetoothController?.writeCustomCharacteristic(10)
-            //bluetoothController?.writeCustomCharacteristic("AAAA")
         }
     }
 
@@ -76,23 +70,25 @@ class MainActivity : AppCompatActivity(), BluetoothInterface {
 
     override fun connectDevice(device: BluetoothDevice) {
         if (device.name == "CYCLISTASSIST") {
-            setStatus("Connecting with " + device.name)
-            bluetoothController?.connectDevice(device)
+            val intent = Intent(this, Control::class.java)
+            intent.putExtra("bluetoothDevice", device)
+
+            startActivity(intent)
         } else {
             setStatus("Invalid Device")
         }
     }
 
     override fun disconnectDevice() {
-        bluetoothController?.disconnectDevice()
+        bluetoothScanner?.disconnectDevice()
     }
 
     override fun checkConnection(): Boolean {
-        return bluetoothController!!.CheckConnection()
+        return bluetoothScanner!!.CheckConnection()
     }
 
     override fun checkDevice(device: BluetoothDevice) : Boolean {
-        return bluetoothController!!.checkDevice(device)
+        return bluetoothScanner!!.checkDevice(device)
     }
 
     override fun NotifyChange() {
