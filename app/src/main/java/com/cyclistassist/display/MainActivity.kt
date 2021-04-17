@@ -13,12 +13,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
-class MainActivity : AppCompatActivity(), BluetoothInterface {
+class MainActivity : AppCompatActivity(), BluetoothMenuInterface {
 
     private val bluetoothDeviceArray = ArrayList<BluetoothDevice>()
     private val bluetoothStatus: TextView by lazy { findViewById<TextView>(R.id.status) }
     private val leDeviceListAdapter : BluetoothConnectionRecyclerAdapter by lazy { BluetoothConnectionRecyclerAdapter(bluetoothDeviceArray, this) }
-    lateinit var bluetoothScanner: BluetoothScanner;
+    lateinit var bluetoothScanner: BluetoothScanner
 
     val scanButton : Button by lazy {findViewById<Button>(R.id.btn_scan)}
 
@@ -46,11 +46,14 @@ class MainActivity : AppCompatActivity(), BluetoothInterface {
 
         scanButton.setOnClickListener {
             leDeviceListAdapter.clearDevices()
-            bluetoothScanner?.scanLeDevice()
+            bluetoothScanner.scanLeDevice()
         }
 
         val settingsButton : Button = findViewById(R.id.btn_settings)
         settingsButton.setOnClickListener {
+            val intent = Intent(this, Settings::class.java)
+
+            startActivity(intent)
         }
     }
 
@@ -80,15 +83,15 @@ class MainActivity : AppCompatActivity(), BluetoothInterface {
     }
 
     override fun disconnectDevice() {
-        bluetoothScanner?.disconnectDevice()
+        bluetoothScanner.disconnectDevice()
     }
 
     override fun checkConnection(): Boolean {
-        return bluetoothScanner!!.CheckConnection()
+        return bluetoothScanner.CheckConnection()
     }
 
     override fun checkDevice(device: BluetoothDevice) : Boolean {
-        return bluetoothScanner!!.checkDevice(device)
+        return bluetoothScanner.checkDevice(device)
     }
 
     override fun NotifyChange() {
@@ -96,7 +99,7 @@ class MainActivity : AppCompatActivity(), BluetoothInterface {
     }
 }
 
-class BluetoothConnectionRecyclerAdapter(private val bluetoothDeviceArray:ArrayList<BluetoothDevice>, private val bluetoothInterface: BluetoothInterface) : RecyclerView.Adapter<BluetoothConnectionRecyclerAdapter.ViewHolder>() {
+class BluetoothConnectionRecyclerAdapter(private val bluetoothDeviceArray:ArrayList<BluetoothDevice>, private val bluetoothMenuInterface: BluetoothMenuInterface) : RecyclerView.Adapter<BluetoothConnectionRecyclerAdapter.ViewHolder>() {
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val nameView: TextView = view.findViewById(R.id.device_name)
         val addressView: TextView = view.findViewById(R.id.device_address)
@@ -125,7 +128,7 @@ class BluetoothConnectionRecyclerAdapter(private val bluetoothDeviceArray:ArrayL
         viewHolder.nameView.text = bluetoothDeviceArray[position].name
         viewHolder.addressView.text = bluetoothDeviceArray[position].address
 
-        if (bluetoothInterface.checkDevice(bluetoothDeviceArray[position])) {
+        if (bluetoothMenuInterface.checkDevice(bluetoothDeviceArray[position])) {
             viewHolder.connectButton.visibility = View.INVISIBLE
             viewHolder.disconnectButton.visibility = View.VISIBLE
         } else {
@@ -134,15 +137,15 @@ class BluetoothConnectionRecyclerAdapter(private val bluetoothDeviceArray:ArrayL
         }
 
         viewHolder.connectButton.setOnClickListener {
-            if (!bluetoothInterface.checkConnection()){
-                bluetoothInterface.disconnectDevice()
+            if (!bluetoothMenuInterface.checkConnection()){
+                bluetoothMenuInterface.disconnectDevice()
             }
 
-            bluetoothInterface.connectDevice(bluetoothDeviceArray[position])
+            bluetoothMenuInterface.connectDevice(bluetoothDeviceArray[position])
         }
 
         viewHolder.disconnectButton.setOnClickListener {
-            bluetoothInterface.disconnectDevice()
+            bluetoothMenuInterface.disconnectDevice()
         }
     }
 

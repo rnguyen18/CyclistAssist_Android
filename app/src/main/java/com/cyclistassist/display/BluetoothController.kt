@@ -18,7 +18,7 @@ private const val TAG = "BluetoothLeController"
 private const val ServiceUUID = "0000FFE0-0000-1000-8000-00805F9B34FB"
 private const val CharacteristicUUID = "0000FFE1-0000-1000-8000-00805F9B34FB"
 
-class BluetoothController(private val context: Context, bluetoothAdapter: BluetoothAdapter) {
+class BluetoothController(private val context: Context, bluetoothAdapter: BluetoothAdapter, bluetoothControllerInterface: BluetoothControllerInterface) {
     private var scanning = false
     private var bluetoothGatt: BluetoothGatt? = null
     private var bluetoothService : BluetoothLeService? = null
@@ -59,6 +59,7 @@ class BluetoothController(private val context: Context, bluetoothAdapter: Blueto
             super.onServicesDiscovered(gatt, status)
             printGattTable()
             writeCustomCharacteristic("C")
+            bluetoothControllerInterface.DeviceConnected()
         }
     }
 

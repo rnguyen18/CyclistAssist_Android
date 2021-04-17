@@ -8,9 +8,12 @@ import android.content.Intent
 import android.content.pm.ActivityInfo
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
+import android.widget.GridLayout
+import android.widget.RelativeLayout
 
-class Control : AppCompatActivity() {
+class Control : AppCompatActivity(), BluetoothControllerInterface {
 
     lateinit var bluetoothController : BluetoothController
     lateinit var bluetoothDevice : BluetoothDevice
@@ -24,7 +27,7 @@ class Control : AppCompatActivity() {
 
         val bluetoothManager = getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
         val bluetoothAdapter: BluetoothAdapter = bluetoothManager.adapter
-        bluetoothController = BluetoothController(this, bluetoothAdapter)
+        bluetoothController = BluetoothController(this, bluetoothAdapter, this)
 
         if (intent.hasExtra("bluetoothDevice")) {
             bluetoothDevice = intent.getParcelableExtra("bluetoothDevice") as BluetoothDevice
@@ -75,5 +78,10 @@ class Control : AppCompatActivity() {
             }
         }
     }
+
+    override fun DeviceConnected() {
+        this.findViewById<RelativeLayout>(R.id.LoadingWindow).visibility = View.INVISIBLE
+    }
 }
+
  enum class LightType {RIGHT, LEFT, HAZARD, NONE}

@@ -12,12 +12,10 @@ import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
 import android.util.Log
-import java.io.Serializable
-import java.util.*
 
 private const val TAG = "BluetoothLeScanner"
 
-class BluetoothScanner (private val context: Context, bluetoothAdapter: BluetoothAdapter, private val bluetoothInterface: BluetoothInterface) {
+class BluetoothScanner (private val context: Context, bluetoothAdapter: BluetoothAdapter, private val bluetoothMenuInterface: BluetoothMenuInterface) {
     private var scanning = false
     private val bluetoothLeScanner: BluetoothLeScanner = bluetoothAdapter.bluetoothLeScanner
     private val handler = Handler()
@@ -35,8 +33,8 @@ class BluetoothScanner (private val context: Context, bluetoothAdapter: Bluetoot
                 }, SCAN_PERIOD)
                 scanning = true
                 scanner.startScan(leScanCallback)
-                bluetoothInterface.setStatus("Scanning")
-                bluetoothInterface.scanMessage("Stop Scan")
+                bluetoothMenuInterface.setStatus("Scanning")
+                bluetoothMenuInterface.scanMessage("Stop Scan")
             } else {
                 stopScanLeDevice(scanner)
             }
@@ -48,8 +46,8 @@ class BluetoothScanner (private val context: Context, bluetoothAdapter: Bluetoot
             if (scanning) {
                 scanning = false
                 scanner.stopScan(leScanCallback)
-                bluetoothInterface.scanMessage("Scan")
-                bluetoothInterface.setStatus("Scanning Ended")
+                bluetoothMenuInterface.scanMessage("Scan")
+                bluetoothMenuInterface.setStatus("Scanning Ended")
             }
         }
     }
@@ -58,8 +56,8 @@ class BluetoothScanner (private val context: Context, bluetoothAdapter: Bluetoot
         if (scanning) {
             scanning = false
             scanner.stopScan(leScanCallback)
-            bluetoothInterface.scanMessage("Scan")
-            bluetoothInterface.setStatus("Scanning Ended")
+            bluetoothMenuInterface.scanMessage("Scan")
+            bluetoothMenuInterface.setStatus("Scanning Ended")
         }
     }
 
@@ -75,7 +73,7 @@ class BluetoothScanner (private val context: Context, bluetoothAdapter: Bluetoot
         override fun onScanResult(callbackType: Int, result: ScanResult) {
             super.onScanResult(callbackType, result)
             if (result.device.name != null) {
-                bluetoothInterface.foundDevice(result.device)
+                bluetoothMenuInterface.foundDevice(result.device)
             }
         }
     }
@@ -93,7 +91,7 @@ class BluetoothScanner (private val context: Context, bluetoothAdapter: Bluetoot
                         }, 1000)
                     }
                     BluetoothGatt.STATE_DISCONNECTED -> {
-                        bluetoothInterface.setStatus("Disconnected to $deviceName")
+                        bluetoothMenuInterface.setStatus("Disconnected to $deviceName")
                         gatt.close()
                     }
                 }
@@ -108,9 +106,9 @@ class BluetoothScanner (private val context: Context, bluetoothAdapter: Bluetoot
             val deviceName = gatt!!.device.name
             super.onServicesDiscovered(gatt, status)
             printGattTable()
-            bluetoothInterface.setStatus("Connected to $deviceName")
+            bluetoothMenuInterface.setStatus("Connected to $deviceName")
             Handler(Looper.getMainLooper()).post {
-                bluetoothInterface.NotifyChange()
+                bluetoothMenuInterface.NotifyChange()
             }
         }
     }
@@ -121,7 +119,7 @@ class BluetoothScanner (private val context: Context, bluetoothAdapter: Bluetoot
         }
         bluetoothGatt?.close()
         bluetoothGatt = null
-        bluetoothInterface.NotifyChange()
+        bluetoothMenuInterface.NotifyChange()
     }
 
     private val serviceConnection: ServiceConnection = object : ServiceConnection {
