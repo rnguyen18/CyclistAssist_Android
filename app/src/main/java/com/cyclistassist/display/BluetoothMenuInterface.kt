@@ -2,7 +2,7 @@ package com.cyclistassist.display
 
 import android.bluetooth.BluetoothDevice
 
-interface BluetoothInterface {
+interface BluetoothMenuInterface {
     fun connectDevice(device : BluetoothDevice)
     fun disconnectDevice()
     fun checkConnection() : Boolean

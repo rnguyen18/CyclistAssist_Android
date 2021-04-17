@@ -7,4 +7,41 @@
         android:layout_height="match_parent"
         tools:context=".Settings">
 
+    <TextView
+            android:id="@+id/settings_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginHorizontal="12dp"
+            android:text="Settings"
+            android:textSize="48dp"/>
+
+    <TextView
+            android:id="@+id/diameter_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginHorizontal="12dp"
+            app:layout_constraintTop_toBottomOf="@id/settings_title"
+            android:text="Wheel Diameter (in):"
+            android:textSize="32dp"/>
+
+    <EditText
+            android:id="@+id/diameter_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="12dp"
+            app:layout_constraintTop_toBottomOf="@id/diameter_title"
+            android:textSize="32dp"
+            tools:layout_editor_absoluteX="8dp" />
+
+    <Button
+            android:id="@+id/save_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="save"
+            android:layout_marginHorizontal="12dp"
+            app:layout_constraintTop_toBottomOf="@id/diameter_input"
+            android:textSize="32dp"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -75,4 +75,20 @@
 
     </RelativeLayout>
 
+    <RelativeLayout
+            android:id="@+id/LoadingWindow"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#333333"
+            android:translationZ="2dp">
+
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="LOADING..."
+                android:translationZ="3dp"/>
+
+    </RelativeLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
