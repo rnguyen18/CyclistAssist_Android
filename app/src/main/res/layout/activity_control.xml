@@ -35,8 +35,18 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toRightOf="@id/btn_left"
-            android:text="##"
-            android:textSize="100dp"
+            app:layout_constraintRight_toLeftOf="@id/radar_default"
+            android:text="0"
+            android:textSize="45dp"
+    />
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toRightOf="@id/speedometer"
+            app:layout_constraintBottom_toBottomOf="@id/speedometer"
+            android:text="mph"
+            android:textSize="25dp"
     />
 
     <ImageView
@@ -46,6 +56,22 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintRight_toLeftOf="@id/btn_right"
             android:src="@drawable/radar_blank"
+    />
+    <ImageView
+            android:id="@+id/radar_1"
+            android:layout_width="300dp"
+            android:layout_height="150dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/btn_right"
+            android:translationZ="5dp"
+    />
+    <ImageView
+            android:id="@+id/radar_2"
+            android:layout_width="300dp"
+            android:layout_height="150dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/btn_right"
+            android:translationZ="5dp"
     />
 
     <RelativeLayout
@@ -62,13 +88,15 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="25dp"
                 android:text="Hazard"
-                android:textSize="25dp"/>
+                android:textSize="25dp"
+                android:layout_marginHorizontal="5dp"/>
 
         <Button
                 android:id="@+id/btn_headlights"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="25dp"
+                android:layout_marginHorizontal="25dp"
                 android:layout_toRightOf="@id/btn_hazard"
                 android:text="headlights"
                 android:textSize="25dp"/>
@@ -76,18 +104,19 @@
     </RelativeLayout>
 
     <RelativeLayout
+            android:visibility="gone"
             android:id="@+id/LoadingWindow"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#333333"
-            android:translationZ="2dp">
+            android:translationZ="10dp">
 
         <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="LOADING..."
-                android:translationZ="3dp"/>
+                android:translationZ="12dp"/>
 
     </RelativeLayout>
 

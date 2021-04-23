@@ -13,9 +13,14 @@ import android.os.IBinder
 import android.os.Looper
 import android.util.Log
 
+
 private const val TAG = "BluetoothLeScanner"
 
-class BluetoothScanner (private val context: Context, bluetoothAdapter: BluetoothAdapter, private val bluetoothMenuInterface: BluetoothMenuInterface) {
+class BluetoothScanner(
+    private val context: Context,
+    bluetoothAdapter: BluetoothAdapter,
+    private val bluetoothMenuInterface: BluetoothMenuInterface
+) {
     private var scanning = false
     private val bluetoothLeScanner: BluetoothLeScanner = bluetoothAdapter.bluetoothLeScanner
     private val handler = Handler()
@@ -42,7 +47,7 @@ class BluetoothScanner (private val context: Context, bluetoothAdapter: Bluetoot
     }
 
     fun stopScanLeDevice() {
-        bluetoothLeScanner.let {scanner ->
+        bluetoothLeScanner.let { scanner ->
             if (scanning) {
                 scanning = false
                 scanner.stopScan(leScanCallback)
@@ -96,7 +101,10 @@ class BluetoothScanner (private val context: Context, bluetoothAdapter: Bluetoot
                     }
                 }
             } else {
-                Log.w("BluetoothGattCallback", "Error $status encountered for $deviceAddress! Disconnecting...")
+                Log.w(
+                    "BluetoothGattCallback",
+                    "Error $status encountered for $deviceAddress! Disconnecting..."
+                )
                 gatt.close()
                 bluetoothGatt = bluetoothDevice!!.connectGatt(context, false, this)
             }
@@ -158,7 +166,10 @@ class BluetoothScanner (private val context: Context, bluetoothAdapter: Bluetoot
 
     private fun printGattTable() {
         if (bluetoothGatt!!.services.isEmpty()) {
-            Log.i("printGattTable", "No service and characteristic available, call discoverServices() first?")
+            Log.i(
+                "printGattTable",
+                "No service and characteristic available, call discoverServices() first?"
+            )
             return
         }
         bluetoothGatt!!.services.forEach { service ->
@@ -166,7 +177,10 @@ class BluetoothScanner (private val context: Context, bluetoothAdapter: Bluetoot
                 separator = "\n|--",
                 prefix = "|--"
             ) { it.uuid.toString() }
-            Log.i("printGattTable", "\nService ${service.uuid}\nCharacteristics:\n$characteristicsTable")
+            Log.i(
+                "printGattTable",
+                "\nService ${service.uuid}\nCharacteristics:\n$characteristicsTable"
+            )
         }
     }
 
